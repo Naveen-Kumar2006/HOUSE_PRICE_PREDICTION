@@ -7,3 +7,5 @@ __pycache__/
 .db
 .ipynb_checkpoints/
 housing.csv
+mlruns\
+mlfow.db
