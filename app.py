@@ -1,4 +1,3 @@
-```python
 from pathlib import Path
 
 import joblib
@@ -101,4 +100,3 @@ if __name__ == "__main__":
         port=8000,
         reload=True
     )
-```
