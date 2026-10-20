@@ -1,3 +1,4 @@
+```python
 from pathlib import Path
 
 import joblib
@@ -27,15 +28,14 @@ templates = Jinja2Templates(
     directory=str(BASE_DIR / "templates")
 )
 
-# Serve CSS and JavaScript files
+# Register static files route
 STATIC_DIR = BASE_DIR / "static"
 
-if STATIC_DIR.exists():
-    app.mount(
-        "/static",
-        StaticFiles(directory=str(STATIC_DIR)),
-        name="static"
-    )
+app.mount(
+    "/static",
+    StaticFiles(directory=str(STATIC_DIR), check_dir=False),
+    name="static"
+)
 
 
 # Home page
@@ -51,7 +51,6 @@ async def home(request: Request):
 @app.post("/predict")
 async def predict(data: dict):
     try:
-        # Map frontend fields to model feature names
         input_data = {
             "longitude": float(data.get("longitude", -122.23)),
             "latitude": float(data.get("latitude", 37.88)),
@@ -64,13 +63,10 @@ async def predict(data: dict):
             "ocean_proximity": data.get("proximity", "NEAR BAY")
         }
 
-        # Create DataFrame with the expected feature names
         input_df = pd.DataFrame([input_data])
 
-        # Predict house price
         prediction = model.predict(input_df)[0]
 
-        # Agent information
         agent_info = {
             "name": "Sarah Mitchell",
             "phone": "+1 (555) 012-3456",
@@ -97,11 +93,12 @@ async def predict(data: dict):
         ) from exc
 
 
-# Run application
+# Run locally
 if __name__ == "__main__":
     uvicorn.run(
         "app:app",
-        host="127.0.0.1",
+        host="0.0.0.0",
         port=8000,
         reload=True
     )
+```
